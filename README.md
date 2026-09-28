@@ -131,7 +131,8 @@ system made money, but which behaviours lost money and how much. The AI Trade
 Auditor then reads those computed numbers and writes a short, neutral finding.
 For example, the single change that would cut losses the most.
 
-Full detail: **[docs/analytics-and-ai-auditor.md](docs/analytics-and-ai-auditor.md)**
+Full detail: **[docs/analytics.md](docs/analytics.md)** and
+**[docs/ai-trade-auditor.md](docs/ai-trade-auditor.md)**
 
 ---
 
@@ -148,7 +149,7 @@ Full detail: **[docs/analytics-and-ai-auditor.md](docs/analytics-and-ai-auditor.
 | Database | MongoDB |
 | Alerts | Telegram bot |
 | Running it | AWS EC2, NGINX |
-| Written in | Anaconda and the Spyder IDE, by hand |
+| Written in | Anaconda and the Spyder IDE, by hand. From October 2025, Cursor 2.0 with its Composer model. |
 
 ---
 
@@ -182,7 +183,7 @@ prices, charges, and the net profit or loss for each.
 
 ![Operating P&L](docs/images/operating-pnl.png)
 
-More screens in **[docs/analytics-and-ai-auditor.md](docs/analytics-and-ai-auditor.md)**.
+More screens in **[docs/analytics.md](docs/analytics.md)**.
 
 > The screens show the name "Trending AKA". That is the name the engine is set
 > up under for personal use.
@@ -195,7 +196,8 @@ More screens in **[docs/analytics-and-ai-auditor.md](docs/analytics-and-ai-audit
 |---|---|
 | [Architecture](docs/architecture.md) | Components, the live price loop, the path from signal to trade |
 | [Risk controls](docs/risk-controls.md) | Every check between a signal and real money |
-| [Analytics and the AI Trade Auditor](docs/analytics-and-ai-auditor.md) | The dashboard, the journal, and how the AI review works |
+| [Analytics](docs/analytics.md) | The trade journal and the analytics dashboard |
+| [The AI Trade Auditor](docs/ai-trade-auditor.md) | How the AI review is built and how the pieces fit together |
 
 ---
 

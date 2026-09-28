@@ -1,4 +1,4 @@
-# Analytics and the AI Trade Auditor
+# Analytics
 
 The engine takes the trades. This part answers the harder question: **is the
 system actually working, and when it loses, is that the system or the person
@@ -151,41 +151,13 @@ from the operator's own records.
 
 ## The AI Trade Auditor
 
-The last view. The operator picks a question, and an AI model answers it from
-the journal data.
+The last view. The operator picks one of six questions, such as "what one change
+would cut losses the most?", and an AI model answers it in a sentence or two.
 
-![AI auditor questions](images/ai-auditor-questions.png)
-
-| Question | What it asks |
-|---|---|
-| Execution consistency | Where does execution quality drop, by trade type and time of day? |
-| Rent efficiency | Where is rent consistently overpaid, and what behaviour comes with it? |
-| Rule violations | What themes keep coming up in the rule-violation notes? |
-| Behavioural drift | Compared with the previous period, what has got worse? |
-| Single behavioural focus | What one change would cut losses the most? |
-| Left tail structure | Over the last four weeks, are the worst losses getting worse? |
+The numbers are worked out in code first. The model only receives that summary
+and writes up the pattern, so every number in its answer can be checked against
+the dashboard.
 
 ![AI auditor response](images/ai-auditor-response.png)
 
-### How it works
-
-**The numbers are worked out first, in code. The AI only writes them up.**
-
-For each question, the engine first computes the statistics itself: counts,
-averages, how answers are spread across trade types and times of day. Only that
-summary is sent to the model. It never sees the raw trade list, and it is not
-asked to do any arithmetic. The one exception is the rule-violation question,
-which also sends the operator's own short notes.
-
-So every number in the answer came from the code, and can be checked against the
-dashboard. The AI's job is to find the pattern in numbers that are already
-correct, and to say it in one or two sentences.
-
-**The model is told what it is not allowed to do.** Each question has its own
-instructions. The model is a neutral auditor. It does not coach, motivate or
-judge. It must stay factual and not react to whether the trades made money.
-Where a question asks for a recommendation, it must give exactly one.
-
-This was the first version of an idea later rebuilt properly in
-[tradeself](https://github.com/amitkaswani/tradeself-architecture): the AI
-explains the evidence, it doesn't produce it.
+How it is built: **[ai-trade-auditor.md](ai-trade-auditor.md)**
