@@ -42,7 +42,9 @@ The work is split in two, on purpose.
 
 **The chart raises the signal.** Any charting platform like TradingView, iCharts
 etc. could be used to trigger the signal. When a setup forms, the chart sends a
-short message to the engine with the price levels that matter.
+short message to the engine with the price levels that matter. It is sent by
+webhook, meaning the chart calls a web address on the engine the moment the
+alert fires.
 
 **The engine decides whether and when to act.** A signal is not an order. The
 engine holds it and watches the live price. It only enters when the price
@@ -55,11 +57,48 @@ past the engine's risk checks before it can cost money.
 
 ---
 
+## Scan wide, accept narrow
+
+This is the most unusual part of the design.
+
+A scalper wants the option contracts closest to where the index is trading right
+now, the "at-the-money" strikes. But that changes all day. When the index moves,
+yesterday's best strike is no longer the right one. Chart alerts can't be moved
+to new strikes automatically, and setting them up again by hand during the day
+isn't practical.
+
+So the scanning and the choosing are done in different places:
+
+1. **The chart scans everything.** A single TradingView watchlist alert covers
+   about 500 option strikes, calls and puts, across all three indices. The
+   indicator runs on every one of them at the same time, and sends a webhook
+   whenever any of them forms a setup.
+2. **The engine chooses.** It keeps its own short list of at-the-money strikes,
+   picked from the live index price and updated as the index moves. A signal is
+   accepted only if it is for a strike on that list. Everything else is ignored.
+
+The chart never needs to know which strikes matter right now. The engine never
+needs to watch 500 charts. And when the index moves, the engine switches strikes
+on its own, with nothing to reconfigure on the chart.
+
+Two small Chrome extensions keep the chart side running:
+
+- **Watchlist refresh.** Rebuilds the watchlist around the current index levels.
+  It adds strikes for the new expiry, and removes expired strikes and strikes
+  that have drifted too far from the index. One click, with a dry run first to
+  preview the changes.
+- **Strike sync.** Every 15 minutes during market hours, it points six
+  TradingView charts (a call and a put for each index) at the strikes the engine
+  is currently watching. It doesn't affect signals. It just saves changing six
+  charts by hand.
+
+---
+
 ## How it fits together
 
 ```mermaid
 flowchart LR
-    CH["Charting platform<br/>(TradingView, iCharts…)"] -- "signal over the web" --> API["Flask API<br/>behind NGINX"]
+    CH["Charting platform<br/>(TradingView, iCharts…)"] -- "webhook" --> API["Flask API<br/>behind NGINX"]
     API --> SE["Signal engine<br/>holds each signal until<br/>price confirms it"]
     FEED["Broker live price feed<br/>(WebSocket)"] --> SE
     FEED --> TM["Trade manager<br/>stop loss · trailing · exits"]
@@ -142,7 +181,8 @@ Full detail: **[docs/analytics.md](docs/analytics.md)** and
 |---|---|
 | Engine | Python, Flask, Flask-SocketIO, gevent, pandas, NumPy, TA-Lib |
 | Market data and orders | Broker APIs: WebSocket live price feed, REST order placement |
-| Signals | Any charting platform with web alerts (TradingView, iCharts…) |
+| Signals | Any charting platform with webhook alerts. TradingView today, with one watchlist alert. |
+| Chart tooling | Two Chrome extensions in JavaScript: watchlist refresh and strike sync |
 | Operator console | React, Vite, AG Grid, Socket.IO |
 | Analytics dashboard | Streamlit, Plotly |
 | AI | OpenAI models, given pre-computed statistics |

@@ -9,8 +9,9 @@ How the engine is put together, and why.
 The engine listens to two things at once.
 
 1. **Signals from a chart.** Any charting platform like TradingView, iCharts etc.
-   could be used to trigger the signal. The chart sends a short message over the
-   web when a setup forms, and another when the setup is cancelled.
+   could be used to trigger the signal. The chart sends a webhook, a short
+   message to a web address on the engine, when a setup forms. It sends another
+   when the setup is cancelled.
 2. **Live prices from the broker.** A continuous stream of price updates for
    every contract the engine is watching, over a WebSocket connection.
 
@@ -24,12 +25,67 @@ update, so it can act on the exact moment the level is crossed.
 
 ---
 
+## Scan wide, accept narrow
+
+The chart side and the engine side each do the part they are good at.
+
+**The chart scans a wide net.** One TradingView watchlist holds about 500 option
+strikes, calls and puts, across all three indices, spread either side of where
+each index is trading. A single watchlist alert runs the indicator across all of
+them at once, on the 5-minute timeframe. Any strike that forms a setup sends a
+webhook.
+
+**The engine accepts a narrow slice.** Contract selection keeps a short list of
+at-the-money strikes, the ones closest to the live index price. The list changes
+as the index moves. When a webhook arrives, the engine checks the strike is on
+that list. If it isn't, the signal is ignored.
+
+```mermaid
+flowchart LR
+    WL["TradingView watchlist<br/>~500 strikes<br/>one alert"] -- "webhooks from<br/>any strike" --> F{"Is this strike on<br/>the engine's current<br/>at-the-money list?"}
+    IDX["Live index price"] --> SEL["Contract selection"] --> F
+    F -- yes --> SE["Signal engine"]
+    F -- no --> X["Ignored"]
+```
+
+Why split it this way:
+
+- **At-the-money moves all day.** The right strike at 09:30 is often the wrong
+  one by 11:00. Chart alerts can't be moved to new strikes automatically.
+  Scanning everything means the signal is already there wherever the index goes.
+- **The engine already knows the index price.** It has the live feed, so it is
+  the right place to decide which strikes matter. The chart doesn't need to
+  know.
+- **Nothing to redo during the day.** The watchlist is kept current with one
+  click. The alert and the engine do the rest on their own.
+
+### The chart-side tools
+
+Two small Chrome extensions, written in JavaScript, look after the TradingView
+side.
+
+**Watchlist refresh.** It fetches the current index levels. It works out the
+upcoming expiry for each index, and the range of strikes either side of
+at-the-money. It then compares that with the watchlist, adds what's missing,
+and removes strikes that have expired or drifted out of range. A dry run shows
+the planned changes before anything is edited. Changes are applied in one batch
+of removals and one batch of additions.
+
+**Strike sync.** Every 15 minutes during market hours, it reads the strikes the
+engine is watching from the operator console. It then switches six TradingView
+charts (a call and a put for each index) to those strikes. When the engine is
+watching more than one strike on a side, the extension prefers the one with a
+waiting signal. This is only for the operator's view. It has no effect on
+signals.
+
+---
+
 ## The components
 
 ```mermaid
 flowchart TD
     subgraph IN[Inputs]
-        CH[Charting platform alerts]
+        CH[Charting platform webhooks]
         FEED[Broker live price feed]
     end
 
