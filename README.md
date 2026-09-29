@@ -5,8 +5,6 @@ derivatives on NSE and BSE. A chart raises a signal. The engine watches the live
 market, decides whether and when to act on it, places the order, and manages the
 trade until it is closed. Every trade is then logged, journaled and analysed.
 
-It ran live for 18 months.
-
 ---
 
 ## What this repository is
@@ -199,7 +197,6 @@ Full detail: **[docs/analytics.md](docs/analytics.md)** and
 |---|---|
 | Commits since December 2024 | about 1,150 |
 | Python in the engine | about 12,700 lines |
-| Months running live | 18 |
 
 ---
 
