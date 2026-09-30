@@ -3,7 +3,7 @@
 **How I built an automated scalping engine for NSE/BSE index options: live
 execution, risk controls, trade journaling and an AI trade auditor.**
 
-![Execution cockpit](docs/images/execution-cockpit.png)
+![Execution cockpit with a live order](docs/images/execution-cockpit-orders.png)
 
 **scalping-engine** is an automated intraday trading engine for Indian index
 derivatives on NSE and BSE. A chart raises a signal. The engine watches the live
@@ -207,21 +207,21 @@ Full detail: **[docs/analytics.md](docs/analytics.md)** and
 
 ## What it looks like
 
-**Execution cockpit** (shown at the top of this page). The live view during
-market hours. On the left, the contracts the engine is watching and when each
-was picked. On the right, where each index is trading within its range for the
-day. At the bottom, the controls for each index and any signals waiting for
-confirmation.
+**Execution cockpit.** The live view during market hours. On the left, the
+contracts the engine is watching and when each was picked. On the right, where
+each index is trading within its range for the day. At the bottom, the controls
+for each index and any signals waiting for confirmation.
+
+![Execution cockpit](docs/images/execution-cockpit.png)
 
 **Execution cockpit with active signals.** Signals the engine has raised and is
 tracking, before any order has been placed.
 
 ![Execution cockpit with active signals](docs/images/execution-cockpit-signals.png)
 
-**Execution cockpit with a live order.** The full view once the engine has
-placed an order, with the live position shown alongside the signals.
-
-![Execution cockpit with a live order](docs/images/execution-cockpit-orders.png)
+**Execution cockpit with a live order** (shown at the top of this page). The
+full view once the engine has placed an order, with the live position shown
+alongside the signals.
 
 **Index configuration.** Every rule the engine follows for one index, changeable
 while the market is open: paper or real trading, the daily loss limit, position
