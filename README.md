@@ -261,3 +261,22 @@ The engine can be shown running live during Indian market hours, 09:15 to 15:30
 IST.
 
 Written by **Amit Kumar Aswani** — [LinkedIn](https://www.linkedin.com/in/amit-kumar-aswani)
+
+---
+
+## Disclaimer
+
+**Educational and demonstration purposes only.** This repository describes the
+design of a personal software project. It is not investment advice, research,
+or a recommendation to buy, sell or hold any security or derivative. Nothing
+here is an offer of a trading service, signal, strategy or product.
+
+**Not SEBI registered.** I am not registered with the Securities and Exchange
+Board of India (SEBI) as an Investment Adviser or a Research Analyst. Consult a
+SEBI-registered adviser before making any investment or trading decision.
+
+Screenshots, figures and results are shown only to illustrate how the software
+works. They are not a claim or promise of returns or performance. Trading in
+futures and options carries a high risk of loss; SEBI's own studies found that
+most individual traders in equity F&O lose money. Any decision you make is your
+own responsibility.
