@@ -1,5 +1,10 @@
 # scalping-engine — architecture and design write-up
 
+**How I built an automated scalping engine for NSE/BSE index options: live
+execution, risk controls, trade journaling and an AI trade auditor.**
+
+![Execution cockpit](docs/images/execution-cockpit.png)
+
 **scalping-engine** is an automated intraday trading engine for Indian index
 derivatives on NSE and BSE. A chart raises a signal. The engine watches the live
 market, decides whether and when to act on it, places the order, and manages the
@@ -202,12 +207,11 @@ Full detail: **[docs/analytics.md](docs/analytics.md)** and
 
 ## What it looks like
 
-**Execution cockpit.** The live view during market hours. On the left, the
-contracts the engine is watching and when each was picked. On the right, where
-each index is trading within its range for the day. At the bottom, the controls
-for each index and any signals waiting for confirmation.
-
-![Execution cockpit](docs/images/execution-cockpit.png)
+**Execution cockpit** (shown at the top of this page). The live view during
+market hours. On the left, the contracts the engine is watching and when each
+was picked. On the right, where each index is trading within its range for the
+day. At the bottom, the controls for each index and any signals waiting for
+confirmation.
 
 **Execution cockpit with active signals.** Signals the engine has raised and is
 tracking, before any order has been placed.
