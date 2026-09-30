@@ -209,6 +209,16 @@ for each index and any signals waiting for confirmation.
 
 ![Execution cockpit](docs/images/execution-cockpit.png)
 
+**Execution cockpit with active signals.** Signals the engine has raised and is
+tracking, before any order has been placed.
+
+![Execution cockpit with active signals](docs/images/execution-cockpit-signals.png)
+
+**Execution cockpit with a live order.** The full view once the engine has
+placed an order, with the live position shown alongside the signals.
+
+![Execution cockpit with a live order](docs/images/execution-cockpit-orders.png)
+
 **Index configuration.** Every rule the engine follows for one index, changeable
 while the market is open: paper or real trading, the daily loss limit, position
 size, stop-loss method and trailing method.
